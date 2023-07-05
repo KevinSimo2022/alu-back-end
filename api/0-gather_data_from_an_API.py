@@ -3,6 +3,8 @@
 import requests
 import sys
 
+""" Functions for gathering  data from an API """
+
 def fetch_employee_data(employee_id):
     base_url = "https://jsonplaceholder.typicode.com"
     employee_url = f"{base_url}/users/{employee_id}"
