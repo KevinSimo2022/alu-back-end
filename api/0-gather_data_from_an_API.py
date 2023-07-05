@@ -1,3 +1,6 @@
+#!/usr/bin/python3
+"""a Python script that, using this REST API"""
+
 import requests
 import sys
 
@@ -22,12 +25,3 @@ if __name__ == "__main__":
           task_com, total_task_done))
 
     [print("\t {}".format(task.get("title"))) for task in total_tasks]
-
-if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python3 gather_data_from_an_API.py <employee_id>")
-        sys.exit(1)
-
-    employee_id = sys.argv[1]
-    employee_name, todos = fetch_employee_data(employee_id)
-    display_todo_progress(employee_name, todos)
