@@ -25,3 +25,4 @@ if __name__ == "__main__":
           task_com, total_task_done))
 
     [print("\t {}".format(task.get("title"))) for task in total_tasks]
+    
