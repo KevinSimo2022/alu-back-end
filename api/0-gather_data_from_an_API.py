@@ -1,10 +1,10 @@
 #!/usr/bin/python3
-"""a Python script that, using this REST API"""
+""" Library to gather data from an API """
 
 import requests
 import sys
 
-""" Functions for gathering  data from an API """
+""" Function to gather data from an API """
 
 if __name__ == "__main__":
     employee_id = sys.argv[1]

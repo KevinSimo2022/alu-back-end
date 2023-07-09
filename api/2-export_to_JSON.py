@@ -1,28 +1,56 @@
 #!/usr/bin/python3
-"""gathers data from an API"""
-
+"""
+    python script that exports data in the JSON format
+"""
 import json
 import requests
-import sys
-
-"""a Python script to export data in the JSON format"""
+from sys import argv
 
 if __name__ == "__main__":
-    employee_id = sys.argv[1]
-    url = "https://jsonplaceholder.typicode.com/users/{}".format(employee_id)
-    todo = "https://jsonplaceholder.typicode.com/todos?userId={}"
-    todo = todo.format(employee_id)
+    """
+        request user info by employee ID
+    """
+    request_employee = requests.get(
+        'https://jsonplaceholder.typicode.com/users/{}/'.format(argv[1]))
+    """
+        convert json to dictionary
+    """
+    user = json.loads(request_employee.text)
+    """
+        extract username
+    """
+    username = user.get("username")
 
-    user_info = requests.request("GET", url).json()
-    todo_info = requests.request("GET", todo).json()
+    """
+        request user's TODO list
+    """
+    request_todos = requests.get(
+        'https://jsonplaceholder.typicode.com/users/{}/todos'.format(argv[1]))
+    """
+        dictionary to store task status(completed) in boolean format
+    """
+    tasks = {}
+    """
+        convert json to list of dictionaries
+    """
+    user_todos = json.loads(request_todos.text)
+    """
+        loop through dictionary & get completed tasks
+    """
+    for dictionary in user_todos:
+        tasks.update({dictionary.get("title"): dictionary.get("completed")})
 
-    employee_username = user_info.get("username")
+    task_list = []
+    for k, v in tasks.items():
+        task_list.append({
+            "task": k,
+            "completed": v,
+            "username": username
+        })
 
-    todos_info_sorted = [
-        dict(zip(["task", "completed", "username"],
-                 [task["title"], task["completed"], employee_username]))
-        for task in todo_info]
-
-    user_dict = {str(employee_id): todos_info_sorted}
-    with open(str(employee_id) + '.json', "w") as f:
-        f.write(json.dumps(user_dict))
+    json_to_dump = {argv[1]: task_list}
+    """
+        export to JSON
+    """
+    with open('{}.json'.format(argv[1]), mode='w') as file:
+        json.dump(json_to_dump, file)
